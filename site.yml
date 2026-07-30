@@ -1,0 +1,8 @@
+- name: Main Playbook
+  hosts: local
+  gather_facts: true
+
+  tasks:
+    - name: Print Hello World
+      ansible.builtin.shell: "echo Hello World > ansible-test.txt"
+
