@@ -1,8 +1,5 @@
-- name: Main Playbook
-  hosts: local
+- name: Internal services
+  hosts: services
   gather_facts: true
-
-  tasks:
-    - name: Print Hello World
-      ansible.builtin.shell: "echo Hello World > ansible-test.txt"
-
+  roles:
+    - sonarqube
