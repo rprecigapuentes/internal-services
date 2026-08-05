@@ -1,0 +1,4 @@
+sonarqube_sonar_db_user: sonar
+sonarqube_sonar_db_name: sonarqube
+sonarqube_sonar_web_port: 9000
+sonarqube_sonar_stack_dir: /opt/sonarqube
