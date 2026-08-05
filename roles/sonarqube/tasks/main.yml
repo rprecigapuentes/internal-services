@@ -1,0 +1,49 @@
+- name: Ensure all pre-requisites for sonarqube are installed
+  ansible.builtin.import_tasks:
+    file: precheck.yml
+
+- name: Create SonarQube folder
+  ansible.builtin.file:
+    path: "{{ sonarqube_sonar_stack_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy SonarQube compose file
+  ansible.builtin.copy:
+    src: compose.yml
+    dest: "{{ sonarqube_sonar_stack_dir }}/compose.yml"
+    mode: '0644'
+  register: sonarqube_compose_file
+
+- name: Render .env template
+  ansible.builtin.template:
+    src: env-compose.j2
+    dest: "{{ sonarqube_sonar_stack_dir }}/.env"
+    mode: '0640'
+  register: sonarqube_env_file
+
+- name: Check SonarQube container
+  ansible.builtin.command:
+    cmd: docker ps --filter name=sonarqube_app --filter status=running --format "{{ '{{' }}.Names{{ '}}' }}"
+  register: sonarqube_app_status
+  changed_when: false
+  failed_when: false
+
+- name: Check PostgreSQL container
+  ansible.builtin.command:
+    cmd: docker ps --filter name=sonarqube_db --filter status=running --format "{{ '{{' }}.Names{{ '}}' }}"
+  register: sonarqube_db_status
+  changed_when: false
+  failed_when: false
+
+- name: Deploy SonarQube and PostgresDB
+  ansible.builtin.shell: docker compose -f {{ sonarqube_sonar_stack_dir }}/compose.yml up -d
+  args:
+    chdir: "{{ sonarqube_sonar_stack_dir }}"
+    executable: /bin/bash
+  when:
+    - sonarqube_compose_file.changed
+      or sonarqube_env_file.changed
+      or sonarqube_app_status.stdout != "sonarqube_app"
+      or sonarqube_db_status.stdout != "sonarqube_db"
+  changed_when: true

@@ -1,1 +1,5 @@
 .ansible
+**/*.local.yml
+**/.env
+**/.env*
+group_vars/services.yml
