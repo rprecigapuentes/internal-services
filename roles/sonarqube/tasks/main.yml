@@ -1,3 +1,28 @@
 - name: Ensure all pre-requisites for sonarqube are installed
   ansible.builtin.import_tasks:
     file: precheck.yml
+
+- name: Create SonarQube folder
+  ansible.builtin.file:
+    path: "{{ sonarqube_sonar_stack_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy SonarQube compose file
+  ansible.builtin.copy:
+    src: compose.yml
+    dest: "{{ sonarqube_sonar_stack_dir }}/compose.yml"
+    mode: '0644'
+
+- name: Render .env template
+  ansible.builtin.template:
+    src: env-compose.j2
+    dest: "{{ sonarqube_sonar_stack_dir }}/.env"
+    mode: '0640'
+
+- name: Deploy SonarQube and PostgresDB
+  ansible.builtin.shell: docker compose -f {{ sonarqube_sonar_stack_dir }}/compose.yml up -d
+  args:
+    chdir: "{{ sonarqube_sonar_stack_dir }}"
+    executable: /bin/bash
+  register: compose_up
