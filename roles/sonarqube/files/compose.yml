@@ -52,7 +52,7 @@ volumes:
     driver: local
   sonarqube_db:
     driver: local
-    
+
 networks:
   sonarqube_net:
     name: sonarqube_net

@@ -1,1 +1,1 @@
-sonar_db_password: "changeme"
+sonarqube_db_password: "changeme"
