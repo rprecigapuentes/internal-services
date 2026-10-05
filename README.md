@@ -2,6 +2,10 @@
 
 Ansible roles that deploy the team's internal services with Docker Compose. 
 
+[![Ansible](https://github.com/rprecigapuentes/internal-services/actions/workflows/ansible.yml/badge.svg)](https://github.com/rprecigapuentes/internal-services/actions/workflows/ansible.yml)
+
+Built for the DevOps module of the Jalasoft Software Automation Testing Bootcamp (2026) to host the team's SonarQube. Author: Rosemberth Preciga ([@rprecigapuentes](https://github.com/rprecigapuentes)), on the module's initial scaffold.
+
 ## sonarqube
 
 Deploys SonarQube Community Edition plus its PostgreSQL database as a Compose stack in `/opt/sonarqube`. Every task uses `ansible.builtin` modules only.
